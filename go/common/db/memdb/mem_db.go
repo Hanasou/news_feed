@@ -30,7 +30,7 @@ func GetDataFromFile(filePath string) (map[string]commodels.Serializable, error)
 	}
 
 	data := map[string]commodels.Serializable{}
-	err = json.Unmarshal(content, data)
+	err = json.Unmarshal(content, &data)
 	if err != nil {
 		log.Printf("Error unmarshalling json into serializable data: %v", err)
 		return map[string]commodels.Serializable{}, err
