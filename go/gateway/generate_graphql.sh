@@ -6,6 +6,7 @@ set -e  # Exit on any error
 
 echo "🚀 Generating Go code from GraphQL schema..."
 
+export PATH=$PATH:$(go env GOPATH)/bin
 # We're already in the gateway directory, no need to change directories
 # The gqlgen.yml file is in the current directory
 
@@ -15,7 +16,6 @@ if ! command -v gqlgen &> /dev/null; then
     go install github.com/99designs/gqlgen@latest
     
     # Add Go bin to PATH if not already there
-    export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
 # Generate Go code from GraphQL schema
