@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package todopb;
+option go_package = "/todopb";
+
+message Todo {
+    string id = 1;
+    string text = 2;
+    bool done = 3;
+    string user_id = 4; // User ID to whom this todo belongs
+}
+
+message CreateTodoRequest {
+    Todo todo = 1;
+}
+
+message CreateTodoResponse {
+    string response = 1;
+}
+
+service TodoService {
+    rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
+}

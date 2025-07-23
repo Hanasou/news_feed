@@ -6,9 +6,9 @@ toolchain go1.23.10
 
 require (
 	github.com/99designs/gqlgen v0.17.76
-	github.com/golang/protobuf v1.5.4
 	github.com/vektah/gqlparser/v2 v2.5.30
 	google.golang.org/grpc v1.73.0
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
@@ -22,5 +22,4 @@ require (
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.26.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
-	google.golang.org/protobuf v1.36.6 // indirect
 )

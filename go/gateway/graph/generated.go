@@ -260,7 +260,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema.graphqls"
+//go:embed "graphql/todo.graphql" "graphql/user.graphql"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -272,7 +272,8 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
-	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
+	{Name: "graphql/todo.graphql", Input: sourceData("graphql/todo.graphql"), BuiltIn: false},
+	{Name: "graphql/user.graphql", Input: sourceData("graphql/user.graphql"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -296,7 +297,7 @@ func (ec *executionContext) field_Mutation_createTodo_argsInput(
 ) (model.NewTodo, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNNewTodo2githubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐNewTodo(ctx, tmp)
+		return ec.unmarshalNNewTodo2githubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐNewTodo(ctx, tmp)
 	}
 
 	var zeroVal model.NewTodo
@@ -454,7 +455,7 @@ func (ec *executionContext) _Mutation_createTodo(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Todo)
 	fc.Result = res
-	return ec.marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTodo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -519,7 +520,7 @@ func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Todo)
 	fc.Result = res
-	return ec.marshalNTodo2ᚕᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐTodoᚄ(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚕᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐTodoᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_todos(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -836,7 +837,7 @@ func (ec *executionContext) _Todo_user(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Todo_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3525,7 +3526,7 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewTodo2githubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐNewTodo(ctx context.Context, v any) (model.NewTodo, error) {
+func (ec *executionContext) unmarshalNNewTodo2githubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐNewTodo(ctx context.Context, v any) (model.NewTodo, error) {
 	res, err := ec.unmarshalInputNewTodo(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3546,11 +3547,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTodo2githubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2githubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v model.Todo) graphql.Marshaler {
 	return ec._Todo(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐTodoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐTodoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Todo) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3574,7 +3575,7 @@ func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋHanasouᚋnews_fee
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐTodo(ctx, sel, v[i])
+			ret[i] = ec.marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐTodo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3594,7 +3595,7 @@ func (ec *executionContext) marshalNTodo2ᚕᚖgithubᚗcomᚋHanasouᚋnews_fee
 	return ret
 }
 
-func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3604,7 +3605,7 @@ func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋHanasouᚋnews_feed�
 	return ec._Todo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋHanasouᚋnews_feedᚋgoᚋgatewayᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
