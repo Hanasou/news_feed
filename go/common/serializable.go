@@ -1,4 +1,4 @@
-package commodels
+package common
 
 import (
 	"encoding/json"

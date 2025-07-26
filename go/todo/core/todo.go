@@ -2,28 +2,24 @@ package core
 
 import (
 	"errors"
-	"fmt"
 	"log"
 
+	"github.com/Hanasou/news_feed/go/common/db"
 	"github.com/Hanasou/news_feed/go/common/db/memdb"
 	"github.com/Hanasou/news_feed/go/todo/models"
 )
 
 type TodoService struct {
-	todoTable *memdb.MemDb
-	userTable *memdb.MemDb
+	todoTable db.DbDriver
+	userTable db.DbDriver
 }
 
-func CreateDb(dbType string, table string, rootPath string) (*memdb.MemDb, error) {
+func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver, error) {
 	if dbType == "mem" {
-		memDbDriver, err := memdb.Initialize(table)
+		memDbDriver, err := memdb.Initialize(table, rootPath, saveToDisk)
 		if err != nil {
-			log.Fatalf("Could not initialize db. Shutting down: %v", err)
+			log.Printf("Could not initialize db. Error: %v", err)
 			return nil, err
-		}
-		memDbDriver.Data, err = memdb.GetDataFromFile(fmt.Sprintf("%s/%s.json", rootPath, table))
-		if err != nil {
-			log.Printf("Could not get file on disk for data initialization: %s", table)
 		}
 		return memDbDriver, nil
 	} else {
@@ -31,23 +27,21 @@ func CreateDb(dbType string, table string, rootPath string) (*memdb.MemDb, error
 	}
 }
 
-func InitializeService(dbType string, rootPath string) (*TodoService, error) {
+func InitializeService(dbType string, rootPath string, saveToDisk bool) (*TodoService, error) {
 	// TODO: Get tables from config
 	service := &TodoService{}
-	todoDb, err := CreateDb(dbType, "todos", rootPath)
+	todoDb, err := CreateDb(dbType, "todos", rootPath, saveToDisk)
 	if err != nil {
-		log.Fatalf("Could not create database driver for table: %s, %v", "todos", err)
-	}
-	service.todoTable = todoDb
-	userDb, err := CreateDb(dbType, "users", rootPath)
-	if err != nil {
-		log.Fatalf("Could not create database driver for table: %s, %v", "users", err)
-	}
-	service.userTable = userDb
-	if err != nil {
-		log.Fatalf("Failed to create db: %v", err)
+		log.Printf("Could not create database driver for table: %s, %v", "todos", err)
 		return nil, err
 	}
+	service.todoTable = todoDb
+	userDb, err := CreateDb(dbType, "users", rootPath, saveToDisk)
+	if err != nil {
+		log.Printf("Could not create database driver for table: %s, %v", "users", err)
+		return nil, err
+	}
+	service.userTable = userDb
 
 	return service, nil
 }

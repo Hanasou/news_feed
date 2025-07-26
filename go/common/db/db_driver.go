@@ -1,11 +1,9 @@
 package db
 
-import (
-	"github.com/Hanasou/news_feed/go/common/commodels"
-)
+import "github.com/Hanasou/news_feed/go/common"
 
 // Common interface database drivers can implement
 type DbDriver interface {
-	Upsert(commodels.Serializable) error
-	GetData() ([]commodels.Serializable, error)
+	Upsert(common.Serializable) error
+	GetData() ([]common.Serializable, error)
 }
