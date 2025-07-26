@@ -177,6 +177,94 @@ func (x *CreateTodoResponse) GetResponse() string {
 	return ""
 }
 
+type GetTodosRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // Optional: filter todos by user ID
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTodosRequest) Reset() {
+	*x = GetTodosRequest{}
+	mi := &file_todo_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTodosRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTodosRequest) ProtoMessage() {}
+
+func (x *GetTodosRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_todo_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTodosRequest.ProtoReflect.Descriptor instead.
+func (*GetTodosRequest) Descriptor() ([]byte, []int) {
+	return file_todo_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetTodosRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type GetTodosResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Todos         []*Todo                `protobuf:"bytes,1,rep,name=todos,proto3" json:"todos,omitempty"` // List of todos
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTodosResponse) Reset() {
+	*x = GetTodosResponse{}
+	mi := &file_todo_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTodosResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTodosResponse) ProtoMessage() {}
+
+func (x *GetTodosResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_todo_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTodosResponse.ProtoReflect.Descriptor instead.
+func (*GetTodosResponse) Descriptor() ([]byte, []int) {
+	return file_todo_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetTodosResponse) GetTodos() []*Todo {
+	if x != nil {
+		return x.Todos
+	}
+	return nil
+}
+
 var File_todo_proto protoreflect.FileDescriptor
 
 const file_todo_proto_rawDesc = "" +
@@ -191,10 +279,15 @@ const file_todo_proto_rawDesc = "" +
 	"\x11CreateTodoRequest\x12 \n" +
 	"\x04todo\x18\x01 \x01(\v2\f.todopb.TodoR\x04todo\"0\n" +
 	"\x12CreateTodoResponse\x12\x1a\n" +
-	"\bresponse\x18\x01 \x01(\tR\bresponse2R\n" +
+	"\bresponse\x18\x01 \x01(\tR\bresponse\"*\n" +
+	"\x0fGetTodosRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"6\n" +
+	"\x10GetTodosResponse\x12\"\n" +
+	"\x05todos\x18\x01 \x03(\v2\f.todopb.TodoR\x05todos2\x91\x01\n" +
 	"\vTodoService\x12C\n" +
 	"\n" +
-	"CreateTodo\x12\x19.todopb.CreateTodoRequest\x1a\x1a.todopb.CreateTodoResponseB\tZ\a/todopbb\x06proto3"
+	"CreateTodo\x12\x19.todopb.CreateTodoRequest\x1a\x1a.todopb.CreateTodoResponse\x12=\n" +
+	"\bGetTodos\x12\x17.todopb.GetTodosRequest\x1a\x18.todopb.GetTodosResponseB\tZ\a/todopbb\x06proto3"
 
 var (
 	file_todo_proto_rawDescOnce sync.Once
@@ -208,21 +301,26 @@ func file_todo_proto_rawDescGZIP() []byte {
 	return file_todo_proto_rawDescData
 }
 
-var file_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_todo_proto_goTypes = []any{
 	(*Todo)(nil),               // 0: todopb.Todo
 	(*CreateTodoRequest)(nil),  // 1: todopb.CreateTodoRequest
 	(*CreateTodoResponse)(nil), // 2: todopb.CreateTodoResponse
+	(*GetTodosRequest)(nil),    // 3: todopb.GetTodosRequest
+	(*GetTodosResponse)(nil),   // 4: todopb.GetTodosResponse
 }
 var file_todo_proto_depIdxs = []int32{
 	0, // 0: todopb.CreateTodoRequest.todo:type_name -> todopb.Todo
-	1, // 1: todopb.TodoService.CreateTodo:input_type -> todopb.CreateTodoRequest
-	2, // 2: todopb.TodoService.CreateTodo:output_type -> todopb.CreateTodoResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 1: todopb.GetTodosResponse.todos:type_name -> todopb.Todo
+	1, // 2: todopb.TodoService.CreateTodo:input_type -> todopb.CreateTodoRequest
+	3, // 3: todopb.TodoService.GetTodos:input_type -> todopb.GetTodosRequest
+	2, // 4: todopb.TodoService.CreateTodo:output_type -> todopb.CreateTodoResponse
+	4, // 5: todopb.TodoService.GetTodos:output_type -> todopb.GetTodosResponse
+	4, // [4:6] is the sub-list for method output_type
+	2, // [2:4] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_todo_proto_init() }
@@ -236,7 +334,7 @@ func file_todo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_todo_proto_rawDesc), len(file_todo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

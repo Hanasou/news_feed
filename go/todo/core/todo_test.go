@@ -105,21 +105,31 @@ func TestTodoService_GetTodos(t *testing.T) {
 		{Id: "todo2", Text: "Second todo", Done: true, UserId: "user2"},
 	}
 
+	// Mock user data
+	users := []*models.User{
+		{Id: "user1", Name: "User One"},
+		{Id: "user2", Name: "User Two"},
+	}
+	for _, user := range users {
+		err = service.userTable.Upsert(user)
+		require.NoError(t, err)
+	}
+
 	for _, todo := range todos {
 		err = service.CreateTodo(todo)
 		require.NoError(t, err)
 	}
 
-	retrievedTodos, err := service.GetTodos()
+	retrievedTodos, err := service.GetTodos("user1")
 	for _, todo := range retrievedTodos {
 		t.Logf("Retrieved todo: %v", todo)
 	}
 	require.NoError(t, err)
-	require.Len(t, retrievedTodos, len(todos))
+	require.Len(t, retrievedTodos, 1)
 
-	for i, todo := range retrievedTodos {
-		require.Equal(t, todos[i].Id, todo.Id)
-		require.Equal(t, todos[i].Text, todo.Text)
-		require.Equal(t, todos[i].Done, todo.Done)
+	for _, todo := range retrievedTodos {
+		require.Equal(t, "todo1", todo.Id)
+		require.Equal(t, "First todo", todo.Text)
+		require.Equal(t, false, todo.Done)
 	}
 }

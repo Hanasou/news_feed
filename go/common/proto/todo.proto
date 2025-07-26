@@ -18,6 +18,15 @@ message CreateTodoResponse {
     string response = 1;
 }
 
+message GetTodosRequest {
+    string user_id = 1; // Optional: filter todos by user ID
+}
+
+message GetTodosResponse {
+    repeated Todo todos = 1; // List of todos
+}
+
 service TodoService {
     rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
+    rpc GetTodos(GetTodosRequest) returns (GetTodosResponse);
 }

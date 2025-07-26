@@ -56,20 +56,44 @@ func (service *TodoService) CreateTodo(todo *models.Todo) error {
 	return nil
 }
 
-func (service *TodoService) GetTodos() ([]*models.Todo, error) {
-	data, err := service.todoTable.GetData()
+func (service *TodoService) GetTodos(userId string) ([]*models.Todo, error) {
+	todoData, err := service.todoTable.GetData()
 	todos := []*models.Todo{}
 	if err != nil {
 		log.Printf("Failed to get todos: %v", err)
 		return nil, err
 	}
 	// Verify that all data is instance of todo
-	for _, v := range data {
+	for _, v := range todoData {
 		if concreteData, ok := v.(*models.Todo); ok {
 			todos = append(todos, concreteData)
 		} else {
 			log.Printf("Could not convert this data into todo: %v", v)
 		}
 	}
-	return todos, nil
+
+	// Filter by userId
+	var filteredTodos []*models.Todo
+	for _, todo := range todos {
+		if todo.UserId == userId {
+			filteredTodos = append(filteredTodos, todo)
+		}
+	}
+	return filteredTodos, nil
+}
+
+func (service *TodoService) VerifyUser(userId string) (bool, error) {
+	userData, err := service.userTable.GetData()
+	if err != nil {
+		log.Printf("Failed to get users: %v", err)
+		return false, err
+	}
+	for _, v := range userData {
+		if concreteData, ok := v.(*models.User); ok {
+			if concreteData.Id == userId {
+				return true, nil
+			}
+		}
+	}
+	return false, errors.New("Invalid userId: " + userId)
 }
