@@ -1,8 +1,13 @@
 type User {
   id: ID!
   name: String!
+  email: String!
+  role: String! # User role (e.g., "admin", "user")
 }
 
 input NewUser {
   name: String!
+  email: String!
+  password: String!
+  role: String!
 }

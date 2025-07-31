@@ -17,6 +17,12 @@ import (
 const defaultPort = "8080"
 
 func main() {
+	startGraphQlServer()
+	log.Println("GraphQL server started on port", defaultPort)
+	select {} // Keep the server running
+}
+
+func startGraphQlServer() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort

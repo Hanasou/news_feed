@@ -4,8 +4,10 @@ package userpb;
 option go_package = "/userpb";
 
 message User {
-    string id = 1;
-    string name = 2;
+    string name = 1;
+    string email = 2;
+    string password = 3; // Password should be hashed before storing 
+    string role = 4; // User role (e.g., "admin", "user")
 }
 
 message CreateUserRequest {
