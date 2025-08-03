@@ -2,6 +2,17 @@
 
 package model
 
+type AuthPayload struct {
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+	User         *User  `json:"user"`
+}
+
+type AuthenticateUser struct {
+	Identifier string `json:"identifier"`
+	Password   string `json:"password"`
+}
+
 type Mutation struct {
 }
 

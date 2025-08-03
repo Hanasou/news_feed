@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Hanasou/news_feed/go/user/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,11 +15,11 @@ func TestJWTAuthentication(t *testing.T) {
 	jwtService := NewJWTService(secretKey, "news-feed-service")
 
 	// Create test user
-	user := &User{
+	user := &models.User{
 		ID:       "user123",
 		Username: "john_doe",
 		Email:    "john@example.com",
-		Role:     "user",
+		Role:     models.Default,
 	}
 
 	// Hash password
@@ -154,11 +155,11 @@ func BenchmarkJWTOperations(b *testing.B) {
 	secretKey := "your-super-secret-key-min-32-chars-long"
 	jwtService := NewJWTService(secretKey, "news-feed-service")
 
-	user := &User{
+	user := &models.User{
 		ID:       "user123",
 		Username: "john_doe",
 		Email:    "john@example.com",
-		Role:     "user",
+		Role:     models.Default,
 	}
 
 	b.Run("GenerateTokenPair", func(b *testing.B) {

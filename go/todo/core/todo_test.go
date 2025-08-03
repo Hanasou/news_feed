@@ -105,16 +105,6 @@ func TestTodoService_GetTodos(t *testing.T) {
 		{Id: "todo2", Text: "Second todo", Done: true, UserId: "user2"},
 	}
 
-	// Mock user data
-	users := []*models.User{
-		{Id: "user1", Name: "User One"},
-		{Id: "user2", Name: "User Two"},
-	}
-	for _, user := range users {
-		err = service.userTable.Upsert(user)
-		require.NoError(t, err)
-	}
-
 	for _, todo := range todos {
 		err = service.CreateTodo(todo)
 		require.NoError(t, err)

@@ -11,3 +11,14 @@ input NewUser {
   password: String!
   role: String!
 }
+
+type AuthPayload {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input AuthenticateUser {
+  identifier: String! # This field can be used for either email or username
+  password: String!
+}

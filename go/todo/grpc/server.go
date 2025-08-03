@@ -38,13 +38,6 @@ func (s *TodoServer) CreateTodo(ctx context.Context, req *todopb.CreateTodoReque
 }
 
 func (s *TodoServer) GetTodos(ctx context.Context, req *todopb.GetTodosRequest) (*todopb.GetTodosResponse, error) {
-	// Validate userId
-	validUserId, err := s.service.VerifyUser(req.GetUserId())
-	if !validUserId || err != nil {
-		log.Printf("Failed to verify userId: %v", err)
-		return nil, err
-	}
-
 	todos, err := s.service.GetTodos(req.GetUserId())
 	if err != nil {
 		log.Printf("Failed to get todos: %v", err)

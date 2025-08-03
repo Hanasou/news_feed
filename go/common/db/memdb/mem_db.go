@@ -41,9 +41,10 @@ func Initialize(table string, rootPath string, saveToDisk bool) (*MemDb, error) 
 		}
 	}
 	db := &MemDb{
-		Table:    table,
-		Data:     data,
-		FilePath: filePath,
+		Table:      table,
+		Data:       data,
+		FilePath:   filePath,
+		SaveToDisk: saveToDisk,
 	}
 	return db, nil
 }

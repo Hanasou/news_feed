@@ -81,19 +81,3 @@ func (service *TodoService) GetTodos(userId string) ([]*models.Todo, error) {
 	}
 	return filteredTodos, nil
 }
-
-func (service *TodoService) VerifyUser(userId string) (bool, error) {
-	userData, err := service.userTable.GetData()
-	if err != nil {
-		log.Printf("Failed to get users: %v", err)
-		return false, err
-	}
-	for _, v := range userData {
-		if concreteData, ok := v.(*models.User); ok {
-			if concreteData.Id == userId {
-				return true, nil
-			}
-		}
-	}
-	return false, errors.New("Invalid userId: " + userId)
-}

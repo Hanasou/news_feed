@@ -9,16 +9,57 @@ import (
 	"fmt"
 
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
+	"github.com/Hanasou/news_feed/go/user/auth"
 )
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+	// Require authentication for viewing todos
+	claims, err := auth.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("authentication required: %w", err)
+	}
+
+	// Log the authenticated user (for debugging)
+	fmt.Printf("User %s (%s) is requesting todos\n", claims.Username, claims.UserID)
+
+	// TODO: Implement actual todo fetching logic
+	// For now, return a sample todo
+	return []*model.Todo{
+		{
+			ID:    "1",
+			Text:  fmt.Sprintf("Sample todo for user %s", claims.Username),
+			Done:  false,
+			UserD: claims.UserID, // Using UserD field as defined in the model
+		},
+	}, nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	// Require admin role for viewing all users
+	claims, err := auth.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("authentication required: %w", err)
+	}
+
+	userRole, err := auth.GetUserRoleFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("user role not found: %w", err)
+	}
+
+	if userRole != "admin" {
+		return nil, fmt.Errorf("admin access required")
+	}
+
+	// TODO: Implement actual user fetching logic
+	// For now, return a sample user list
+	return []*model.User{
+		{
+			ID:   claims.UserID,
+			Name: claims.Username,
+		},
+	}, nil
 }
 
 // Query returns QueryResolver implementation.

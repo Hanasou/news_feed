@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Hanasou/news_feed/go/user/models"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -23,10 +24,10 @@ type JWTService struct {
 
 // Claims represents the JWT claims
 type Claims struct {
-	UserID   string `json:"user_id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Role     string `json:"role,omitempty"`
+	UserID   string      `json:"user_id"`
+	Username string      `json:"username"`
+	Email    string      `json:"email"`
+	Role     models.Role `json:"role,omitempty"`
 	jwt.RegisteredClaims
 }
 
@@ -36,15 +37,6 @@ type TokenPair struct {
 	RefreshToken string `json:"refresh_token"`
 	ExpiresIn    int64  `json:"expires_in"`
 	TokenType    string `json:"token_type"`
-}
-
-// User represents a user for authentication
-type User struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"` // hashed
-	Role     string `json:"role"`
 }
 
 // Context keys for storing user info
@@ -69,7 +61,7 @@ func NewJWTService(secretKey, issuer string) *JWTService {
 }
 
 // GenerateTokenPair creates both access and refresh tokens
-func (j *JWTService) GenerateTokenPair(user *User) (*TokenPair, error) {
+func (j *JWTService) GenerateTokenPair(user *models.User) (*TokenPair, error) {
 	// Generate access token
 	accessToken, err := j.generateAccessToken(user)
 	if err != nil {
@@ -91,7 +83,7 @@ func (j *JWTService) GenerateTokenPair(user *User) (*TokenPair, error) {
 }
 
 // generateAccessToken creates a new JWT access token
-func (j *JWTService) generateAccessToken(user *User) (string, error) {
+func (j *JWTService) generateAccessToken(user *models.User) (string, error) {
 	claims := &Claims{
 		UserID:   user.ID,
 		Username: user.Username,

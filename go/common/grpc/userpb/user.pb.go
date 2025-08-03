@@ -177,6 +177,118 @@ func (x *CreateUserResponse) GetResponse() string {
 	return ""
 }
 
+type AuthenticateUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Identifier    string                 `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"` // This can be an email or username
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthenticateUserRequest) Reset() {
+	*x = AuthenticateUserRequest{}
+	mi := &file_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthenticateUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthenticateUserRequest) ProtoMessage() {}
+
+func (x *AuthenticateUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthenticateUserRequest.ProtoReflect.Descriptor instead.
+func (*AuthenticateUserRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AuthenticateUserRequest) GetIdentifier() string {
+	if x != nil {
+		return x.Identifier
+	}
+	return ""
+}
+
+func (x *AuthenticateUserRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type AuthenticateUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	User          *User                  `protobuf:"bytes,3,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthenticateUserResponse) Reset() {
+	*x = AuthenticateUserResponse{}
+	mi := &file_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthenticateUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthenticateUserResponse) ProtoMessage() {}
+
+func (x *AuthenticateUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthenticateUserResponse.ProtoReflect.Descriptor instead.
+func (*AuthenticateUserResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *AuthenticateUserResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *AuthenticateUserResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *AuthenticateUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 var File_user_proto protoreflect.FileDescriptor
 
 const file_user_proto_rawDesc = "" +
@@ -191,10 +303,20 @@ const file_user_proto_rawDesc = "" +
 	"\x11CreateUserRequest\x12 \n" +
 	"\x04user\x18\x01 \x01(\v2\f.userpb.UserR\x04user\"0\n" +
 	"\x12CreateUserResponse\x12\x1a\n" +
-	"\bresponse\x18\x01 \x01(\tR\bresponse2R\n" +
+	"\bresponse\x18\x01 \x01(\tR\bresponse\"U\n" +
+	"\x17AuthenticateUserRequest\x12\x1e\n" +
+	"\n" +
+	"identifier\x18\x01 \x01(\tR\n" +
+	"identifier\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x84\x01\n" +
+	"\x18AuthenticateUserResponse\x12!\n" +
+	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12 \n" +
+	"\x04user\x18\x03 \x01(\v2\f.userpb.UserR\x04user2\xa9\x01\n" +
 	"\vUserService\x12C\n" +
 	"\n" +
-	"CreateUser\x12\x19.userpb.CreateUserRequest\x1a\x1a.userpb.CreateUserResponseB\tZ\a/userpbb\x06proto3"
+	"CreateUser\x12\x19.userpb.CreateUserRequest\x1a\x1a.userpb.CreateUserResponse\x12U\n" +
+	"\x10AuthenticateUser\x12\x1f.userpb.AuthenticateUserRequest\x1a .userpb.AuthenticateUserResponseB\tZ\a/userpbb\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
@@ -208,21 +330,26 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_user_proto_goTypes = []any{
-	(*User)(nil),               // 0: userpb.User
-	(*CreateUserRequest)(nil),  // 1: userpb.CreateUserRequest
-	(*CreateUserResponse)(nil), // 2: userpb.CreateUserResponse
+	(*User)(nil),                     // 0: userpb.User
+	(*CreateUserRequest)(nil),        // 1: userpb.CreateUserRequest
+	(*CreateUserResponse)(nil),       // 2: userpb.CreateUserResponse
+	(*AuthenticateUserRequest)(nil),  // 3: userpb.AuthenticateUserRequest
+	(*AuthenticateUserResponse)(nil), // 4: userpb.AuthenticateUserResponse
 }
 var file_user_proto_depIdxs = []int32{
 	0, // 0: userpb.CreateUserRequest.user:type_name -> userpb.User
-	1, // 1: userpb.UserService.CreateUser:input_type -> userpb.CreateUserRequest
-	2, // 2: userpb.UserService.CreateUser:output_type -> userpb.CreateUserResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 1: userpb.AuthenticateUserResponse.user:type_name -> userpb.User
+	1, // 2: userpb.UserService.CreateUser:input_type -> userpb.CreateUserRequest
+	3, // 3: userpb.UserService.AuthenticateUser:input_type -> userpb.AuthenticateUserRequest
+	2, // 4: userpb.UserService.CreateUser:output_type -> userpb.CreateUserResponse
+	4, // 5: userpb.UserService.AuthenticateUser:output_type -> userpb.AuthenticateUserResponse
+	4, // [4:6] is the sub-list for method output_type
+	2, // [2:4] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_user_proto_init() }
@@ -236,7 +363,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_proto_rawDesc), len(file_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

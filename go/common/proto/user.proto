@@ -18,6 +18,18 @@ message CreateUserResponse {
     string response = 1;
 }
 
+message AuthenticateUserRequest {
+    string identifier = 1; // This can be an email or username
+    string password = 2;
+}
+
+message AuthenticateUserResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+    User user = 3;
+}
+
 service UserService {
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
 }

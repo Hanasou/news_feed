@@ -9,16 +9,95 @@ import (
 	"fmt"
 
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
+	"github.com/Hanasou/news_feed/go/user/auth"
+	"github.com/Hanasou/news_feed/go/user/models"
 )
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+	// Require authentication for creating todos
+	claims, err := auth.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("authentication required: %w", err)
+	}
+
+	// Ensure user can only create todos for themselves (or allow admins to create for others)
+	if input.UserID != claims.UserID {
+		userRole, roleErr := auth.GetUserRoleFromContext(ctx)
+		if roleErr != nil || userRole != "admin" {
+			return nil, fmt.Errorf("can only create todos for yourself")
+		}
+	}
+
+	// TODO: Implement actual todo creation logic
+	// For now, return a mock todo
+	return &model.Todo{
+		ID:    "new-todo-id",
+		Text:  input.Text,
+		Done:  false,
+		UserD: input.UserID,
+	}, nil
 }
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	// Hash the password
+	_, err := auth.HashPassword(input.Password)
+	if err != nil {
+		return nil, fmt.Errorf("failed to hash password: %w", err)
+	}
+
+	// TODO: Implement actual user creation logic with the hashed password
+	// For now, return a mock user
+	return &model.User{
+		ID:    "new-user-id",
+		Name:  input.Name,
+		Email: input.Email,
+		Role:  input.Role,
+	}, nil
+}
+
+// AuthenticateUser is the resolver for the authenticateUser field.
+func (r *mutationResolver) AuthenticateUser(ctx context.Context, input model.AuthenticateUser) (*model.AuthPayload, error) {
+	// TODO: In a real implementation, you would:
+	// 1. Look up the user by identifier (username/email)
+	// 2. Validate the password
+	// 3. Generate JWT tokens
+
+	// For demonstration, create a mock user
+	user := &models.User{
+		ID:       "user123",
+		Username: input.Identifier,
+		Email:    input.Identifier + "@example.com",
+		Role:     models.Default, // Use Default role instead of RoleUser
+	}
+
+	// Hash the provided password (in real implementation, compare with stored hash)
+	hashedPassword, err := auth.HashPassword(input.Password)
+	if err != nil {
+		return nil, fmt.Errorf("authentication failed: %w", err)
+	}
+	user.Password = hashedPassword
+
+	// Create JWT service (in real implementation, inject this as a dependency)
+	jwtService := auth.NewJWTService("your-secret-key", "news-feed-gateway")
+
+	// Generate token pair
+	tokens, err := jwtService.GenerateTokenPair(user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate tokens: %w", err)
+	}
+
+	return &model.AuthPayload{
+		AccessToken:  tokens.AccessToken,
+		RefreshToken: tokens.RefreshToken,
+		User: &model.User{
+			ID:    user.ID,
+			Name:  user.Username,
+			Email: user.Email,
+			Role:  string(user.Role),
+		},
+	}, nil
 }
 
 // Mutation returns MutationResolver implementation.
