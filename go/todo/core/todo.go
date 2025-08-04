@@ -10,13 +10,12 @@ import (
 )
 
 type TodoService struct {
-	todoTable db.DbDriver
-	userTable db.DbDriver
+	todoTable db.DbDriver[*models.Todo]
 }
 
-func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver, error) {
+func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*models.Todo], error) {
 	if dbType == "mem" {
-		memDbDriver, err := memdb.Initialize(table, rootPath, saveToDisk)
+		memDbDriver, err := memdb.Initialize[*models.Todo](table, rootPath, saveToDisk)
 		if err != nil {
 			log.Printf("Could not initialize db. Error: %v", err)
 			return nil, err
@@ -36,12 +35,6 @@ func InitializeService(dbType string, rootPath string, saveToDisk bool) (*TodoSe
 		return nil, err
 	}
 	service.todoTable = todoDb
-	userDb, err := CreateDb(dbType, "users", rootPath, saveToDisk)
-	if err != nil {
-		log.Printf("Could not create database driver for table: %s, %v", "users", err)
-		return nil, err
-	}
-	service.userTable = userDb
 
 	return service, nil
 }
@@ -57,19 +50,10 @@ func (service *TodoService) CreateTodo(todo *models.Todo) error {
 }
 
 func (service *TodoService) GetTodos(userId string) ([]*models.Todo, error) {
-	todoData, err := service.todoTable.GetData()
-	todos := []*models.Todo{}
+	todos, err := service.todoTable.GetData()
 	if err != nil {
 		log.Printf("Failed to get todos: %v", err)
 		return nil, err
-	}
-	// Verify that all data is instance of todo
-	for _, v := range todoData {
-		if concreteData, ok := v.(*models.Todo); ok {
-			todos = append(todos, concreteData)
-		} else {
-			log.Printf("Could not convert this data into todo: %v", v)
-		}
 	}
 
 	// Filter by userId

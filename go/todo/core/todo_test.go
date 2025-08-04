@@ -36,7 +36,6 @@ func TestInitializeService(t *testing.T) {
 			require.NoError(t, err, "Did not expect error for db type: %s", tt.dbType)
 			require.NotNil(t, newService, "Expected service to be initialized")
 			require.NotNil(t, newService.todoTable, "Expected todo table to be initialized")
-			require.NotNil(t, newService.userTable, "Expected user table to be initialized")
 		}
 	}
 }

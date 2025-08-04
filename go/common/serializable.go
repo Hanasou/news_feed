@@ -7,7 +7,7 @@ import (
 
 type Serializable interface {
 	ToJson() (string, error)
-	GetId() (string, error)
+	GetID() (string, error)
 }
 
 // Default function for turning a serializable into JSON

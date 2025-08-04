@@ -16,6 +16,6 @@ func (user *User) ToJson() (string, error) {
 	return common.ToJson(user)
 }
 
-func (user *User) GetId() (string, error) {
+func (user *User) GetID() (string, error) {
 	return user.ID, nil
 }

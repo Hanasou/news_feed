@@ -12,12 +12,12 @@ import (
 
 type UserService struct {
 	// Add fields for user service if needed
-	userTable db.DbDriver
+	userTable db.DbDriver[*models.User]
 }
 
-func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver, error) {
+func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*models.User], error) {
 	if dbType == "mem" {
-		memDbDriver, err := memdb.Initialize(table, rootPath, saveToDisk)
+		memDbDriver, err := memdb.Initialize[*models.User](table, rootPath, saveToDisk)
 		if err != nil {
 			log.Printf("Could not initialize db. Error: %v", err)
 			return nil, err

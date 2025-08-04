@@ -13,6 +13,6 @@ func (todo *Todo) ToJson() (string, error) {
 	return common.ToJson(todo)
 }
 
-func (todo *Todo) GetId() (string, error) {
+func (todo *Todo) GetID() (string, error) {
 	return todo.Id, nil
 }
