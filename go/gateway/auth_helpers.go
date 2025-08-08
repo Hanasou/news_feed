@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/Hanasou/news_feed/go/user/auth"
+	"github.com/Hanasou/news_feed/go/common/auth"
 )
 
 // GraphQL context helpers for authentication

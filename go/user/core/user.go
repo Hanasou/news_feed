@@ -4,20 +4,20 @@ import (
 	"errors"
 	"log"
 
+	"github.com/Hanasou/news_feed/go/common/auth"
+	"github.com/Hanasou/news_feed/go/common/common_models"
 	"github.com/Hanasou/news_feed/go/common/db"
 	"github.com/Hanasou/news_feed/go/common/db/memdb"
-	"github.com/Hanasou/news_feed/go/user/auth"
-	"github.com/Hanasou/news_feed/go/user/models"
 )
 
 type UserService struct {
 	// Add fields for user service if needed
-	userTable db.DbDriver[*models.User]
+	userTable db.DbDriver[*common_models.User]
 }
 
-func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*models.User], error) {
+func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*common_models.User], error) {
 	if dbType == "mem" {
-		memDbDriver, err := memdb.Initialize[*models.User](table, rootPath, saveToDisk)
+		memDbDriver, err := memdb.Initialize[*common_models.User](table, rootPath, saveToDisk)
 		if err != nil {
 			log.Printf("Could not initialize db. Error: %v", err)
 			return nil, err
@@ -41,7 +41,7 @@ func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserSe
 	return service, nil
 }
 
-func (service *UserService) CreateUser(user *models.User) error {
+func (service *UserService) CreateUser(user *common_models.User) error {
 	if user == nil {
 		log.Println("Create user failed: user is nil")
 		return errors.New("user cannot be nil")
@@ -51,7 +51,7 @@ func (service *UserService) CreateUser(user *models.User) error {
 		return errors.New("user must have username, password, and email")
 	}
 	if !user.Role.IsValid() {
-		user.Role = models.Default
+		user.Role = common_models.Default
 	}
 
 	// Hash password before storing

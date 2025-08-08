@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Hanasou/news_feed/go/common/auth"
+	"github.com/Hanasou/news_feed/go/common/common_models"
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
-	"github.com/Hanasou/news_feed/go/user/auth"
-	"github.com/Hanasou/news_feed/go/user/models"
 )
 
 // CreateTodo is the resolver for the createTodo field.
@@ -65,11 +65,11 @@ func (r *mutationResolver) AuthenticateUser(ctx context.Context, input model.Aut
 	// 3. Generate JWT tokens
 
 	// For demonstration, create a mock user
-	user := &models.User{
+	user := &common_models.User{
 		ID:       "user123",
 		Username: input.Identifier,
 		Email:    input.Identifier + "@example.com",
-		Role:     models.Default, // Use Default role instead of RoleUser
+		Role:     common_models.Default, // Use Default role instead of RoleUser
 	}
 
 	// Hash the provided password (in real implementation, compare with stored hash)

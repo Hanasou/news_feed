@@ -11,14 +11,16 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/Hanasou/news_feed/go/common/auth"
 	"github.com/Hanasou/news_feed/go/gateway/graph"
-	"github.com/Hanasou/news_feed/go/user/auth"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
 const defaultPort = "8080"
 
 // JWTMiddleware validates JWT tokens for GraphQL requests
+// TODO: Send request to user service to validate JWT
+// and fetch user information.
 func JWTMiddleware(jwtService *auth.JWTService) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

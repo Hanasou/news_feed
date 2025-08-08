@@ -1,4 +1,4 @@
-package models
+package common_models
 
 import (
 	"github.com/Hanasou/news_feed/go/common"

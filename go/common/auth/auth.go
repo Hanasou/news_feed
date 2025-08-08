@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Hanasou/news_feed/go/user/models"
+	"github.com/Hanasou/news_feed/go/common/common_models"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,10 +24,10 @@ type JWTService struct {
 
 // Claims represents the JWT claims
 type Claims struct {
-	UserID   string      `json:"user_id"`
-	Username string      `json:"username"`
-	Email    string      `json:"email"`
-	Role     models.Role `json:"role,omitempty"`
+	UserID   string             `json:"user_id"`
+	Username string             `json:"username"`
+	Email    string             `json:"email"`
+	Role     common_models.Role `json:"role,omitempty"`
 	jwt.RegisteredClaims
 }
 
@@ -61,7 +61,7 @@ func NewJWTService(secretKey, issuer string) *JWTService {
 }
 
 // GenerateTokenPair creates both access and refresh tokens
-func (j *JWTService) GenerateTokenPair(user *models.User) (*TokenPair, error) {
+func (j *JWTService) GenerateTokenPair(user *common_models.User) (*TokenPair, error) {
 	// Generate access token
 	accessToken, err := j.generateAccessToken(user)
 	if err != nil {
@@ -83,7 +83,7 @@ func (j *JWTService) GenerateTokenPair(user *models.User) (*TokenPair, error) {
 }
 
 // generateAccessToken creates a new JWT access token
-func (j *JWTService) generateAccessToken(user *models.User) (string, error) {
+func (j *JWTService) generateAccessToken(user *common_models.User) (string, error) {
 	claims := &Claims{
 		UserID:   user.ID,
 		Username: user.Username,

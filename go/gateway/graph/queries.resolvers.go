@@ -8,8 +8,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Hanasou/news_feed/go/common/auth"
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
-	"github.com/Hanasou/news_feed/go/user/auth"
 )
 
 // Todos is the resolver for the todos field.

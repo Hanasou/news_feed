@@ -1,0 +1,8 @@
+go 1.23.10
+
+use (
+	./common
+	./gateway
+	./todo
+	./user
+)

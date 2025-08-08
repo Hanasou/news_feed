@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Hanasou/news_feed/go/user/models"
+	"github.com/Hanasou/news_feed/go/common/common_models"
 )
 
 // Example usage of the JWT authentication system
@@ -17,7 +17,7 @@ func ExampleUsage() {
 	jwtService := NewJWTService(secretKey, "news-feed-service")
 
 	// 2. Create a user (normally from database)
-	user := &models.User{
+	user := &common_models.User{
 		ID:       "user123",
 		Username: "john_doe",
 		Email:    "john@example.com",
@@ -145,7 +145,7 @@ func LoginHandler(jwtService *JWTService, userService UserService) http.HandlerF
 
 // UserService interface (implement this)
 type UserService interface {
-	GetByUsername(username string) (*models.User, error)
-	GetByID(id string) (*models.User, error)
-	Create(user *models.User) error
+	GetByUsername(username string) (*common_models.User, error)
+	GetByID(id string) (*common_models.User, error)
+	Create(user *common_models.User) error
 }
