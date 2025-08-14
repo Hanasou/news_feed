@@ -12,20 +12,8 @@ import (
 
 type UserService struct {
 	// Add fields for user service if needed
-	userTable db.DbDriver[*common_models.User]
-}
-
-func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*common_models.User], error) {
-	if dbType == "mem" {
-		memDbDriver, err := memdb.Initialize[*common_models.User](table, rootPath, saveToDisk)
-		if err != nil {
-			log.Printf("Could not initialize db. Error: %v", err)
-			return nil, err
-		}
-		return memDbDriver, nil
-	} else {
-		return nil, errors.New("CreateDb in Todo service failed. Db type not supported: " + dbType)
-	}
+	userTable  db.DbDriver[*common_models.User]
+	jwtService *auth.JWTService
 }
 
 func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserService, error) {
@@ -39,6 +27,19 @@ func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserSe
 	service.userTable = userDb
 
 	return service, nil
+}
+
+func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*common_models.User], error) {
+	if dbType == "mem" {
+		memDbDriver, err := memdb.Initialize[*common_models.User](table, rootPath, saveToDisk)
+		if err != nil {
+			log.Printf("Could not initialize db. Error: %v", err)
+			return nil, err
+		}
+		return memDbDriver, nil
+	} else {
+		return nil, errors.New("CreateDb in Todo service failed. Db type not supported: " + dbType)
+	}
 }
 
 func (service *UserService) CreateUser(user *common_models.User) error {
@@ -71,4 +72,36 @@ func (service *UserService) CreateUser(user *common_models.User) error {
 	}
 	log.Printf("Insert succeeded: %v", user)
 	return nil
+}
+
+func (service *UserService) AuthenticateUser(userIdentifier, password string) (*auth.TokenPair, error) {
+	if userIdentifier == "" || password == "" {
+		log.Println("Authenticate user failed: missing username or password")
+		return nil, errors.New("username and password must be provided")
+	}
+
+	user, err := service.userTable.GetByField("username", userIdentifier)
+	if err != nil {
+		log.Printf("Authenticate user failed: %v", err)
+		return nil, err
+	}
+	if user == nil {
+		log.Println("Authenticate user failed: user not found")
+		return nil, nil
+	}
+
+	// Check password
+	if err = auth.ValidatePassword(password, user.Password); err != nil {
+		log.Println("Authenticate user failed: invalid password")
+		return nil, nil
+	}
+
+	tokenPair, err := service.jwtService.GenerateTokenPair(user)
+	if err != nil {
+		log.Printf("Could not generate token pair: %v", err)
+		return nil, err
+	}
+
+	log.Printf("User authenticated successfully: %v", user)
+	return tokenPair, nil
 }

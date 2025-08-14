@@ -75,6 +75,20 @@ func (db *MemDb[T]) Upsert(item T) error {
 	return nil
 }
 
+func (db *MemDb[T]) GetByField(field string, value any) (T, error) {
+	var zero T
+	for _, item := range db.Data {
+		itemField, err := item.GetField(field)
+		if err != nil {
+			return zero, err
+		}
+		if itemField == value {
+			return item, nil
+		}
+	}
+	return zero, errors.New("item not found")
+}
+
 // UpsertAndSave upserts an item and immediately saves all data to the table file
 func (db *MemDb[T]) UpsertAndSave(item T) error {
 	// First upsert the item

@@ -7,4 +7,5 @@ type DbDriver[T common.Serializable] interface {
 	GetData() ([]T, error)
 	GetByID(id string) (T, error)
 	Delete(id string) error
+	GetByField(field string, value any) (T, error)
 }
