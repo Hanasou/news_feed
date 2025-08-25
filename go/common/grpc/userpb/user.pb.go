@@ -23,10 +23,11 @@ const (
 
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"` // Password should be hashed before storing
-	Role          string                 `protobuf:"bytes,4,opt,name=role,proto3" json:"role,omitempty"`         // User role (e.g., "admin", "user")
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Password      string                 `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"` // Password should be hashed before storing
+	Role          string                 `protobuf:"bytes,5,opt,name=role,proto3" json:"role,omitempty"`         // User role (e.g., "admin", "user")
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,9 +62,16 @@ func (*User) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *User) GetName() string {
+func (x *User) GetID() string {
 	if x != nil {
-		return x.Name
+		return x.ID
+	}
+	return ""
+}
+
+func (x *User) GetUsername() string {
+	if x != nil {
+		return x.Username
 	}
 	return ""
 }
@@ -230,12 +238,14 @@ func (x *AuthenticateUserRequest) GetPassword() string {
 }
 
 type AuthenticateUserResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	RefreshToken  string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	User          *User                  `protobuf:"bytes,3,opt,name=user,proto3" json:"user,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken      string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken     string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	ExpiresTimestamp int64                  `protobuf:"varint,3,opt,name=expires_timestamp,json=expiresTimestamp,proto3" json:"expires_timestamp,omitempty"`
+	TokenType        string                 `protobuf:"bytes,4,opt,name=token_type,json=tokenType,proto3" json:"token_type,omitempty"`
+	User             *User                  `protobuf:"bytes,5,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *AuthenticateUserResponse) Reset() {
@@ -282,6 +292,20 @@ func (x *AuthenticateUserResponse) GetRefreshToken() string {
 	return ""
 }
 
+func (x *AuthenticateUserResponse) GetExpiresTimestamp() int64 {
+	if x != nil {
+		return x.ExpiresTimestamp
+	}
+	return 0
+}
+
+func (x *AuthenticateUserResponse) GetTokenType() string {
+	if x != nil {
+		return x.TokenType
+	}
+	return ""
+}
+
 func (x *AuthenticateUserResponse) GetUser() *User {
 	if x != nil {
 		return x.User
@@ -294,12 +318,13 @@ var File_user_proto protoreflect.FileDescriptor
 const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"user.proto\x12\x06userpb\"`\n" +
-	"\x04User\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x12\n" +
-	"\x04role\x18\x04 \x01(\tR\x04role\"5\n" +
+	"user.proto\x12\x06userpb\"x\n" +
+	"\x04User\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\x12\x1a\n" +
+	"\bpassword\x18\x04 \x01(\tR\bpassword\x12\x12\n" +
+	"\x04role\x18\x05 \x01(\tR\x04role\"5\n" +
 	"\x11CreateUserRequest\x12 \n" +
 	"\x04user\x18\x01 \x01(\v2\f.userpb.UserR\x04user\"0\n" +
 	"\x12CreateUserResponse\x12\x1a\n" +
@@ -308,11 +333,14 @@ const file_user_proto_rawDesc = "" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
 	"identifier\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x84\x01\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\xd0\x01\n" +
 	"\x18AuthenticateUserResponse\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
-	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12 \n" +
-	"\x04user\x18\x03 \x01(\v2\f.userpb.UserR\x04user2\xa9\x01\n" +
+	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12+\n" +
+	"\x11expires_timestamp\x18\x03 \x01(\x03R\x10expiresTimestamp\x12\x1d\n" +
+	"\n" +
+	"token_type\x18\x04 \x01(\tR\ttokenType\x12 \n" +
+	"\x04user\x18\x05 \x01(\v2\f.userpb.UserR\x04user2\xa9\x01\n" +
 	"\vUserService\x12C\n" +
 	"\n" +
 	"CreateUser\x12\x19.userpb.CreateUserRequest\x1a\x1a.userpb.CreateUserResponse\x12U\n" +

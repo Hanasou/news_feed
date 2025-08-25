@@ -95,6 +95,8 @@ func startGraphQlServer(jwtService *auth.JWTService) {
 		port = defaultPort
 	}
 
+	// TODO: Initialize clients here.
+	// Get client types from config file
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
 	srv.AddTransport(transport.Options{})

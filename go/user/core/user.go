@@ -74,34 +74,34 @@ func (service *UserService) CreateUser(user *common_models.User) error {
 	return nil
 }
 
-func (service *UserService) AuthenticateUser(userIdentifier, password string) (*auth.TokenPair, error) {
+func (service *UserService) AuthenticateUser(userIdentifier, password string) (*auth.TokenPair, *common_models.User, error) {
 	if userIdentifier == "" || password == "" {
 		log.Println("Authenticate user failed: missing username or password")
-		return nil, errors.New("username and password must be provided")
+		return nil, nil, errors.New("username and password must be provided")
 	}
 
 	user, err := service.userTable.GetByField("username", userIdentifier)
 	if err != nil {
 		log.Printf("Authenticate user failed: %v", err)
-		return nil, err
+		return nil, nil, err
 	}
 	if user == nil {
 		log.Println("Authenticate user failed: user not found")
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	// Check password
 	if err = auth.ValidatePassword(password, user.Password); err != nil {
 		log.Println("Authenticate user failed: invalid password")
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	tokenPair, err := service.jwtService.GenerateTokenPair(user)
 	if err != nil {
 		log.Printf("Could not generate token pair: %v", err)
-		return nil, err
+		return nil, nil, err
 	}
 
 	log.Printf("User authenticated successfully: %v", user)
-	return tokenPair, nil
+	return tokenPair, user, nil
 }

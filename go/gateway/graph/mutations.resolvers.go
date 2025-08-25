@@ -13,6 +13,15 @@ import (
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
 )
 
+// Mutation returns MutationResolver implementation.
+func (r *Resolver) Mutation() MutationResolver {
+	return &mutationResolver{r}
+}
+
+type mutationResolver struct {
+	*Resolver
+}
+
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	// Require authentication for creating todos
@@ -46,6 +55,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	if err != nil {
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
+
+	// Send information to user service
 
 	// TODO: Implement actual user creation logic with the hashed password
 	// For now, return a mock user
@@ -99,8 +110,3 @@ func (r *mutationResolver) AuthenticateUser(ctx context.Context, input model.Aut
 		},
 	}, nil
 }
-
-// Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-
-type mutationResolver struct{ *Resolver }

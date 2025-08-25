@@ -1,7 +1,5 @@
 package common_models
 
-import "fmt"
-
 type Role string
 
 const (
@@ -22,13 +20,13 @@ func (r Role) String() string {
 	return string(r)
 }
 
-func RoleFromString(roleStr string) (Role, error) {
+func RoleFromString(roleStr string) Role {
 	switch roleStr {
 	case "admin":
-		return Admin, nil
+		return Admin
 	case "default":
-		return Default, nil
+		return Default
 	default:
-		return "", fmt.Errorf("invalid role: %s", roleStr)
+		return Default
 	}
 }

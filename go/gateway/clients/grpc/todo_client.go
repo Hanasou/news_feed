@@ -8,20 +8,20 @@ import (
 	"github.com/Hanasou/news_feed/go/common/grpc/todopb"
 )
 
-type TodoClient struct {
+type GrpcTodoClient struct {
 	client todopb.TodoServiceClient
 }
 
-func NewTodoClient(client todopb.TodoServiceClient) *TodoClient {
-	return &TodoClient{client: client}
+func NewTodoClient(client todopb.TodoServiceClient) *GrpcTodoClient {
+	return &GrpcTodoClient{client: client}
 }
 
-func (c *TodoClient) CreateTodo(ctx context.Context, todo *todopb.Todo) (*todopb.CreateTodoResponse, error) {
+func (c *GrpcTodoClient) CreateTodo(ctx context.Context, todo *todopb.Todo) (*todopb.CreateTodoResponse, error) {
 	req := &todopb.CreateTodoRequest{Todo: todo}
 	return c.client.CreateTodo(ctx, req)
 }
 
-func (c *TodoClient) GetTodos(ctx context.Context, userId string) (*todopb.GetTodosResponse, error) {
+func (c *GrpcTodoClient) GetTodos(ctx context.Context, userId string) (*todopb.GetTodosResponse, error) {
 	req := &todopb.GetTodosRequest{UserId: userId}
 	return c.client.GetTodos(ctx, req)
 }
