@@ -17,7 +17,6 @@ type UserService struct {
 }
 
 func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserService, error) {
-	// TODO: Get tables from config
 	service := &UserService{}
 	userDb, err := CreateDb(dbType, "users", rootPath, saveToDisk)
 	if err != nil {
@@ -38,7 +37,7 @@ func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db
 		}
 		return memDbDriver, nil
 	} else {
-		return nil, errors.New("CreateDb in Todo service failed. Db type not supported: " + dbType)
+		return nil, errors.New("CreateDb in User service failed. Db type not supported: " + dbType)
 	}
 }
 
