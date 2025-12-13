@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -12,8 +11,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Hanasou/news_feed/go/common/auth"
+	"github.com/Hanasou/news_feed/go/common/grpc/userpb"
+	"github.com/Hanasou/news_feed/go/gateway/clients"
+	"github.com/Hanasou/news_feed/go/gateway/clients/grpc_clients"
+	"github.com/Hanasou/news_feed/go/gateway/config"
 	"github.com/Hanasou/news_feed/go/gateway/graph"
 	"github.com/vektah/gqlparser/v2/ast"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const defaultPort = "8080"
@@ -68,9 +73,7 @@ func isIntrospectionQuery(r *http.Request) bool {
 	}
 
 	// Simple check for introspection - you might want to make this more sophisticated
-	contentType := r.Header.Get("Content-Type")
-	return strings.Contains(contentType, "application/json") &&
-		r.Header.Get("X-GraphQL-Introspection") == "true"
+	return r.Header.Get("X-GraphQL-Introspection") == "true"
 }
 
 func main() {
@@ -95,9 +98,15 @@ func startGraphQlServer(jwtService *auth.JWTService) {
 		port = defaultPort
 	}
 
+	gatewayConfig, err := config.InitConfig()
+	if err != nil {
+		log.Fatalf("Failed to initialize config: %v", err)
+	}
+
+	gqlResolver := createResolver(gatewayConfig)
 	// TODO: Initialize clients here.
 	// Get client types from config file
-	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
@@ -118,4 +127,35 @@ func startGraphQlServer(jwtService *auth.JWTService) {
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func createResolver(config *config.GatewayConfig) *graph.Resolver {
+	gqlResolver := &graph.Resolver{
+		Config:     config,
+		UserClient: createUserClient("grpc", config.Clients.UserServiceUrl, config.Debug),
+	}
+	return gqlResolver
+}
+
+func createUserClient(clientType string, url string, debug bool) clients.UserClient {
+	switch clientType {
+	case "grpc":
+		var conn *grpc.ClientConn
+		if debug {
+			conn, err := grpc.NewClient(url+":50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err != nil {
+				log.Fatalf("Failed to connect to User service: %v", err)
+			}
+			defer conn.Close()
+		} else {
+			// TODO: Set up a connection to the gRPC server.
+			log.Fatalf("Implement connection with real credentials")
+		}
+		return grpc_clients.NewUserClient(userpb.NewUserServiceClient(conn))
+	// case "rest":
+	// 	return createRestUserClient()
+	default:
+		log.Fatalf("Unsupported client type: %s", clientType)
+	}
+	return nil
 }

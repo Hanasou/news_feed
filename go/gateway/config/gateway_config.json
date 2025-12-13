@@ -1,0 +1,6 @@
+{
+    "debug": true,
+    "clients": {
+        "user_service_url": "localhost"
+    }
+}

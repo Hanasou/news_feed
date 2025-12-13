@@ -3,7 +3,7 @@ package core
 import (
 	"testing"
 
-	"github.com/Hanasou/news_feed/go/todo/models"
+	"github.com/Hanasou/news_feed/go/common/models"
 	"github.com/stretchr/testify/require"
 )
 

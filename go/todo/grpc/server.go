@@ -7,8 +7,8 @@ import (
 	"log"
 
 	"github.com/Hanasou/news_feed/go/common/grpc/todopb"
+	"github.com/Hanasou/news_feed/go/common/models"
 	"github.com/Hanasou/news_feed/go/todo/core"
-	"github.com/Hanasou/news_feed/go/todo/models"
 )
 
 type TodoServer struct {

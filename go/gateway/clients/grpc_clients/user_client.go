@@ -1,4 +1,4 @@
-package grpc
+package grpc_clients
 
 // grpc UserClient is a client for interacting with the User service over gRPC.
 
@@ -7,9 +7,9 @@ import (
 	"log"
 
 	"github.com/Hanasou/news_feed/go/common/auth"
-	"github.com/Hanasou/news_feed/go/common/common_models"
-	"github.com/Hanasou/news_feed/go/common/common_models/responses"
 	"github.com/Hanasou/news_feed/go/common/grpc/userpb"
+	"github.com/Hanasou/news_feed/go/common/models"
+	"github.com/Hanasou/news_feed/go/common/models/responses"
 )
 
 type GrpcUserClient struct {
@@ -20,7 +20,7 @@ func NewUserClient(client userpb.UserServiceClient) *GrpcUserClient {
 	return &GrpcUserClient{client: client}
 }
 
-func (c *GrpcUserClient) CreateUser(ctx context.Context, user *common_models.User) (*responses.CreateUserResponse, error) {
+func (c *GrpcUserClient) CreateUser(ctx context.Context, user *models.User) (*responses.CreateUserResponse, error) {
 
 	newUser := &userpb.User{
 		Username: user.Username,
@@ -51,12 +51,12 @@ func (c *GrpcUserClient) AuthenticateUser(ctx context.Context, identifier, passw
 		log.Println("Error in AuthenticateUser from User service: ", err)
 		return nil, err
 	}
-	user := &common_models.User{
+	user := &models.User{
 		ID:       grpcAuthResponse.User.ID,
 		Username: grpcAuthResponse.User.Username,
 		Email:    grpcAuthResponse.User.Email,
 		Password: grpcAuthResponse.User.Password,
-		Role:     common_models.RoleFromString(grpcAuthResponse.User.Role),
+		Role:     models.RoleFromString(grpcAuthResponse.User.Role),
 	}
 	return &responses.AuthUserResponse{
 		TokenPair: &auth.TokenPair{

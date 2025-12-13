@@ -1,4 +1,4 @@
-package grpc
+package grpc_clients
 
 // grpc TodoClient is a client for interacting with the Todo service over gRPC.
 

@@ -5,14 +5,14 @@ import (
 	"log"
 
 	"github.com/Hanasou/news_feed/go/common/auth"
-	"github.com/Hanasou/news_feed/go/common/common_models"
 	"github.com/Hanasou/news_feed/go/common/db"
 	"github.com/Hanasou/news_feed/go/common/db/memdb"
+	"github.com/Hanasou/news_feed/go/common/models"
 )
 
 type UserService struct {
 	// Add fields for user service if needed
-	userTable  db.DbDriver[*common_models.User]
+	userTable  db.DbDriver[*models.User]
 	jwtService *auth.JWTService
 }
 
@@ -28,9 +28,9 @@ func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserSe
 	return service, nil
 }
 
-func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*common_models.User], error) {
+func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*models.User], error) {
 	if dbType == "mem" {
-		memDbDriver, err := memdb.Initialize[*common_models.User](table, rootPath, saveToDisk)
+		memDbDriver, err := memdb.Initialize[*models.User](table, rootPath, saveToDisk)
 		if err != nil {
 			log.Printf("Could not initialize db. Error: %v", err)
 			return nil, err
@@ -41,7 +41,7 @@ func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db
 	}
 }
 
-func (service *UserService) CreateUser(user *common_models.User) error {
+func (service *UserService) CreateUser(user *models.User) error {
 	if user == nil {
 		log.Println("Create user failed: user is nil")
 		return errors.New("user cannot be nil")
@@ -51,7 +51,7 @@ func (service *UserService) CreateUser(user *common_models.User) error {
 		return errors.New("user must have username, password, and email")
 	}
 	if !user.Role.IsValid() {
-		user.Role = common_models.Default
+		user.Role = models.Default
 	}
 
 	// Hash password before storing
@@ -73,7 +73,7 @@ func (service *UserService) CreateUser(user *common_models.User) error {
 	return nil
 }
 
-func (service *UserService) AuthenticateUser(userIdentifier, password string) (*auth.TokenPair, *common_models.User, error) {
+func (service *UserService) AuthenticateUser(userIdentifier, password string) (*auth.TokenPair, *models.User, error) {
 	if userIdentifier == "" || password == "" {
 		log.Println("Authenticate user failed: missing username or password")
 		return nil, nil, errors.New("username and password must be provided")

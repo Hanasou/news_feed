@@ -4,35 +4,40 @@ package userpb;
 option go_package = "/userpb";
 
 message User {
-    string ID = 1;
-    string username = 2;
-    string email = 3;
-    string password = 4; // Password should be hashed before storing 
-    string role = 5; // User role (e.g., "admin", "user")
+  string id       = 1;
+  string username = 2;
+  string email    = 3;
+  string password = 4;
+  // User role (e.g., "admin", "user")
+  string role     = 5;
 }
 
 message CreateUserRequest {
-    User user = 1;
+  User user = 1;
 }
 
 message CreateUserResponse {
-    string response = 1;
+  string response = 1;
 }
 
 message AuthenticateUserRequest {
-    string identifier = 1; // This can be an email or username
-    string password = 2;
+  // Identifier can be either username or email
+  string identifier = 1;
+  string password   = 2;
 }
 
 message AuthenticateUserResponse {
-    string access_token = 1;
-    string refresh_token = 2;
-    int64  expires_timestamp = 3;
-    string token_type = 4;
-    User   user = 5;
+  string access_token      = 1;
+  string refresh_token     = 2;
+  int64  expires_timestamp = 3;
+  string token_type        = 4;
+  User   user              = 5;
 }
 
+// UserService defines the user management operations.
 service UserService {
-    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
-    rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
+  // Creates a new user with the provided information.
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  // Authenticates a user and returns tokens upon successful authentication.
+  rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
 }

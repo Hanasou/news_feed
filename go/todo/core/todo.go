@@ -6,7 +6,7 @@ import (
 
 	"github.com/Hanasou/news_feed/go/common/db"
 	"github.com/Hanasou/news_feed/go/common/db/memdb"
-	"github.com/Hanasou/news_feed/go/todo/models"
+	"github.com/Hanasou/news_feed/go/common/models"
 )
 
 type TodoService struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/Hanasou/news_feed/go/common/common_models"
 	"github.com/Hanasou/news_feed/go/common/grpc/userpb"
+	"github.com/Hanasou/news_feed/go/common/models"
 	"github.com/Hanasou/news_feed/go/user/core"
 )
 
@@ -22,12 +22,12 @@ func NewGrpcUserServer(service *core.UserService) *GrpcUserServer {
 
 func (s *GrpcUserServer) CreateUser(ctx context.Context, request *userpb.CreateUserRequest) (*userpb.CreateUserResponse, error) {
 	responseMessage := "User failed to get created"
-	user := &common_models.User{
+	user := &models.User{
 		ID:       request.User.ID,
 		Username: request.User.Username,
 		Email:    request.User.Email,
 		Password: request.User.Password,
-		Role:     common_models.RoleFromString(request.User.Role),
+		Role:     models.RoleFromString(request.User.Role),
 	}
 	err := s.service.CreateUser(user)
 	if err != nil {

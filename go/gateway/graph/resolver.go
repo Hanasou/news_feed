@@ -2,6 +2,7 @@ package graph
 
 import (
 	"github.com/Hanasou/news_feed/go/gateway/clients"
+	"github.com/Hanasou/news_feed/go/gateway/config"
 )
 
 // This file will not be regenerated automatically.
@@ -11,4 +12,5 @@ import (
 type Resolver struct {
 	UserClient clients.UserClient
 	TodoClient clients.TodoClient
+	Config     *config.GatewayConfig
 }

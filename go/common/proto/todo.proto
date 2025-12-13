@@ -4,29 +4,34 @@ package todopb;
 option go_package = "/todopb";
 
 message Todo {
-    string id = 1;
-    string text = 2;
-    bool done = 3;
-    string user_id = 4; // User ID to whom this todo belongs
+  string id      = 1;
+  string text    = 2;
+  bool   done    = 3;
+  // ID of the user who owns this todo
+  string user_id = 4;
 }
 
 message CreateTodoRequest {
-    Todo todo = 1;
+  Todo todo = 1;
 }
 
 message CreateTodoResponse {
-    string response = 1;
+  string response = 1;
 }
 
 message GetTodosRequest {
-    string user_id = 1; // Optional: filter todos by user ID
+  // Optional: filter todos by user ID
+  string user_id = 1;
 }
 
 message GetTodosResponse {
-    repeated Todo todos = 1; // List of todos
+  repeated Todo todos = 1; // List of todos;
 }
 
+// TodoService defines the todo management operations.
 service TodoService {
-    rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
-    rpc GetTodos(GetTodosRequest) returns (GetTodosResponse);
+  // Creates a new todo item.
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse);
+  // Retrieves todo items, optionally filtered by user ID.
+  rpc GetTodos(GetTodosRequest) returns (GetTodosResponse);
 }

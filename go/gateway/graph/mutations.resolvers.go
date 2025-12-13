@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"github.com/Hanasou/news_feed/go/common/auth"
-	"github.com/Hanasou/news_feed/go/common/common_models"
+	"github.com/Hanasou/news_feed/go/common/models"
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
 )
 
@@ -76,11 +76,11 @@ func (r *mutationResolver) AuthenticateUser(ctx context.Context, input model.Aut
 	// 3. Generate JWT tokens
 
 	// For demonstration, create a mock user
-	user := &common_models.User{
+	user := &models.User{
 		ID:       "user123",
 		Username: input.Identifier,
 		Email:    input.Identifier + "@example.com",
-		Role:     common_models.Default, // Use Default role instead of RoleUser
+		Role:     models.Default, // Use Default role instead of RoleUser
 	}
 
 	// Hash the provided password (in real implementation, compare with stored hash)
