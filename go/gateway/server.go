@@ -87,6 +87,8 @@ func main() {
 
 	jwtService := auth.NewJWTService(secretKey, "news-feed-gateway")
 
+	// Unfortunately this server is tightly coupled with GraphQL
+	// We'll just deal with that for now.
 	startGraphQlServer(jwtService)
 	log.Println("GraphQL server started on port", defaultPort)
 	select {} // Keep the server running

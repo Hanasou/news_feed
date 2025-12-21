@@ -16,7 +16,7 @@ type ClientsConfig struct {
 }
 
 func InitConfig() (*GatewayConfig, error) {
-	result, err := parsers.ParseJSONFile("./config/gateway_config.json", &GatewayConfig{})
+	result, err := parsers.ParseJSONFile("/app/go/gateway/config/gateway_config.json", &GatewayConfig{})
 	if err != nil {
 		log.Println("Error parsing gateway_config.json:", err)
 		return nil, err
