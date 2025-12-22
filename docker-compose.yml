@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: go/gateway/Dockerfile
+    image: news_feed_gateway:latest
+    container_name: gateway-server-container
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    # Uncomment the following to always rebuild the image before starting
+    # build:
+    #   context: .
+    #   dockerfile: go/gateway/Dockerfile
+    #   args:
+    #     - CACHEBUST=1
+    # environment:
+    #   - CACHEBUST=${CACHEBUST}
