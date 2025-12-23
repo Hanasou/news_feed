@@ -1,0 +1,13 @@
+{
+    "database": {
+        "type": "local",
+        "root_path": "/app/go/user/data/user_db",
+        "save_to_disk": true,
+        "table": "users"
+    },
+    "server": {
+        "type": "grpc",
+        "host": "localhost",
+        "port": 50051
+    }
+}

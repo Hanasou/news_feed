@@ -8,6 +8,7 @@ import (
 	"github.com/Hanasou/news_feed/go/common/db"
 	"github.com/Hanasou/news_feed/go/common/db/memdb"
 	"github.com/Hanasou/news_feed/go/common/models"
+	"github.com/Hanasou/news_feed/go/user/config"
 )
 
 type UserService struct {
@@ -16,9 +17,10 @@ type UserService struct {
 	jwtService *auth.JWTService
 }
 
-func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserService, error) {
+func InitializeService(userServiceConfig config.UserServiceConfig) (*UserService, error) {
 	service := &UserService{}
-	userDb, err := CreateDb(dbType, "users", rootPath, saveToDisk)
+	userDb, err := CreateDb(userServiceConfig.Database.Type, userServiceConfig.Database.Table,
+		userServiceConfig.Database.RootPath, userServiceConfig.Database.SaveToDisk)
 	if err != nil {
 		log.Printf("Could not create database driver for table: %s, %v", "users", err)
 		return nil, err
@@ -29,7 +31,7 @@ func InitializeService(dbType string, rootPath string, saveToDisk bool) (*UserSe
 }
 
 func CreateDb(dbType string, table string, rootPath string, saveToDisk bool) (db.DbDriver[*models.User], error) {
-	if dbType == "mem" {
+	if dbType == "local" {
 		memDbDriver, err := memdb.Initialize[*models.User](table, rootPath, saveToDisk)
 		if err != nil {
 			log.Printf("Could not initialize db. Error: %v", err)
