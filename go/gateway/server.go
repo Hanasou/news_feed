@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -133,18 +134,19 @@ func startGraphQlServer(jwtService *auth.JWTService) {
 
 func createResolver(config *config.GatewayConfig) *graph.Resolver {
 	gqlResolver := &graph.Resolver{
-		Config:     config,
-		UserClient: createUserClient("grpc", config.Clients.UserServiceUrl, config.Debug),
+		Config: config,
+		UserClient: createUserClient(config.Clients.UserClientConfig.Protocol, config.Clients.UserClientConfig.ServiceHost,
+			config.Clients.UserClientConfig.ServicePort, config.Debug),
 	}
 	return gqlResolver
 }
 
-func createUserClient(clientType string, url string, debug bool) clients.UserClient {
+func createUserClient(clientType string, url string, port int, debug bool) clients.UserClient {
 	switch clientType {
 	case "grpc":
 		var conn *grpc.ClientConn
 		if debug {
-			conn, err := grpc.NewClient(url+":50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+			conn, err := grpc.NewClient(url+":"+strconv.Itoa(port), grpc.WithTransportCredentials(insecure.NewCredentials()))
 			if err != nil {
 				log.Fatalf("Failed to connect to User service: %v", err)
 			}

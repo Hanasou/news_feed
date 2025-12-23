@@ -1,6 +1,10 @@
 {
     "debug": true,
     "clients": {
-        "user_service_url": "localhost"
+        "user_client_config": {
+            "protocol": "grpc",
+            "service_host": "localhost",
+            "service_port": 50051
+        }
     }
 }

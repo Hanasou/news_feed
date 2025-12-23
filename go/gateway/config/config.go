@@ -12,7 +12,13 @@ type GatewayConfig struct {
 }
 
 type ClientsConfig struct {
-	UserServiceUrl string `json:"user_service_url"`
+	UserClientConfig UserClientConfig `json:"user_client_config"`
+}
+
+type UserClientConfig struct {
+	Protocol    string `json:"protocol"`
+	ServiceHost string `json:"service_host"`
+	ServicePort int    `json:"service_port"`
 }
 
 func InitConfig() (*GatewayConfig, error) {
