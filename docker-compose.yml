@@ -9,6 +9,15 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
+  user_service:
+    build:
+      context: .
+      dockerfile: go/user/Dockerfile
+    image: news_feed_user_service:latest
+    container_name: user-service-container
+    ports:
+      - "50051:50051"
+    restart: unless-stopped
     # Uncomment the following to always rebuild the image before starting
     # build:
     #   context: .

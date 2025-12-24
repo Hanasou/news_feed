@@ -20,7 +20,6 @@ func createServer(config *config.UserServiceConfig, userService *core.UserServic
 	default:
 		log.Fatalf("Unsupported server: %s", config.Server.Type)
 	}
-
 }
 
 func createGrpcServer(config *config.UserServiceConfig, userService *core.UserService) {
