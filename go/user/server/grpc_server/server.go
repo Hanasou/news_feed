@@ -1,4 +1,4 @@
-package grpc
+package grpc_server
 
 import (
 	"context"
@@ -65,3 +65,5 @@ func (s *GrpcUserServer) AuthenticateUser(ctx context.Context, request *userpb.A
 	}
 	return response, nil
 }
+
+func (s *GrpcUserServer) mustEmbedUnimplementedUserServiceServer() {}

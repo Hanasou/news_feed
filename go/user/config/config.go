@@ -8,6 +8,7 @@ import (
 
 type UserServiceConfig struct {
 	Database DatabaseConfig `json:"database"`
+	Server   ServerConfig   `json:"server"`
 }
 
 type DatabaseConfig struct {
@@ -15,6 +16,12 @@ type DatabaseConfig struct {
 	RootPath   string `json:"root_path"`
 	SaveToDisk bool   `json:"save_to_disk"`
 	Table      string `json:"table"`
+}
+
+type ServerConfig struct {
+	Type string `json:"type"`
+	Host string `json:"host"`
+	Port int    `json:"port"`
 }
 
 func InitConfig() (*UserServiceConfig, error) {

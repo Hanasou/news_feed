@@ -17,7 +17,7 @@ type UserService struct {
 	jwtService *auth.JWTService
 }
 
-func InitializeService(userServiceConfig config.UserServiceConfig) (*UserService, error) {
+func InitializeService(userServiceConfig *config.UserServiceConfig) (*UserService, error) {
 	service := &UserService{}
 	userDb, err := CreateDb(userServiceConfig.Database.Type, userServiceConfig.Database.Table,
 		userServiceConfig.Database.RootPath, userServiceConfig.Database.SaveToDisk)
