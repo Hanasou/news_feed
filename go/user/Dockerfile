@@ -28,6 +28,9 @@ COPY --from=builder /app/go/user/user_service .
 # Expose the port your gateway listens on (change if needed)
 EXPOSE 50051
 
+# Environment variables
+ENV CONFIG_PATH=/app/go/user/config/
+
 # Copy the config file
 COPY --from=builder /app/go/user/config/user_service_config.json ./go/user/config/user_service_config.json
 # Copy sample data file

@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"os"
 
 	"github.com/Hanasou/news_feed/go/common/parsers"
 )
@@ -24,10 +25,20 @@ type ServerConfig struct {
 	Port int    `json:"port"`
 }
 
+const configName = "user_service_config.json"
+
+func getConfigPath() string {
+	configPath := os.Getenv("CONFIG_PATH")
+	if configPath == "" {
+		configPath = "./config/"
+	}
+	return configPath + configName
+}
+
 func InitConfig() (*UserServiceConfig, error) {
-	result, err := parsers.ParseJSONFile("/app/go/user/config/user_config.json", &UserServiceConfig{})
+	result, err := parsers.ParseJSONFile(getConfigPath(), &UserServiceConfig{})
 	if err != nil {
-		log.Println("Error parsing user_config.json:", err)
+		log.Printf("Error parsing %s: %s", configName, err)
 		return nil, err
 	}
 	return result.(*UserServiceConfig), nil

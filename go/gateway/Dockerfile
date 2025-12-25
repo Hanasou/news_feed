@@ -28,6 +28,9 @@ COPY --from=builder /app/go/gateway/gateway .
 # Expose the port your gateway listens on (change if needed)
 EXPOSE 8080
 
+# Environment variables
+ENV CONFIG_PATH=/app/go/gateway/config/
+
 # Copy the config file
 COPY --from=builder /app/go/gateway/config/gateway_config.json ./go/gateway/config/gateway_config.json
 

@@ -146,7 +146,9 @@ func createUserClient(clientType string, url string, port int, debug bool) clien
 	case "grpc":
 		var conn *grpc.ClientConn
 		if debug {
-			conn, err := grpc.NewClient(url+":"+strconv.Itoa(port), grpc.WithTransportCredentials(insecure.NewCredentials()))
+			grpcServiceUrl := url + ":" + strconv.Itoa(port)
+			log.Printf("Initializing grpc client. Connecting to: %s", grpcServiceUrl)
+			conn, err := grpc.NewClient(grpcServiceUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 			if err != nil {
 				log.Fatalf("Failed to connect to User service: %v", err)
 			}

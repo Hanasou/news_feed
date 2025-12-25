@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: go/gateway/Dockerfile
     image: news_feed_gateway:latest
-    container_name: gateway-server-container
+    container_name: gateway-service-container
     ports:
       - "8080:8080"
     restart: unless-stopped
