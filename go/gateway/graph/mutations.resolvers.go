@@ -10,6 +10,7 @@ import (
 
 	"github.com/Hanasou/news_feed/go/common/auth"
 	"github.com/Hanasou/news_feed/go/common/models"
+	"github.com/Hanasou/news_feed/go/common/util"
 	"github.com/Hanasou/news_feed/go/gateway/graph/model"
 )
 
@@ -51,20 +52,26 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	// Hash the password
-	_, err := auth.HashPassword(input.Password)
+	password, err := auth.HashPassword(input.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
 
 	// Send information to user service
+	user := &models.User{
+		ID:       util.NewUUID(),
+		Username: input.Name,
+		Email:    input.Email,
+		Password: password,
+		Role:     models.RoleFromString(input.Role),
+	}
+	r.UserClient.CreateUser(ctx, user)
 
-	// TODO: Implement actual user creation logic with the hashed password
-	// For now, return a mock user
 	return &model.User{
-		ID:    "new-user-id",
-		Name:  input.Name,
-		Email: input.Email,
-		Role:  input.Role,
+		ID:    user.ID,
+		Name:  user.Username,
+		Email: user.Email,
+		Role:  user.Role.String(),
 	}, nil
 }
 

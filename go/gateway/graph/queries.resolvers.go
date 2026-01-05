@@ -44,29 +44,44 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	// Require admin role for viewing all users
-	claims, err := auth.GetClaimsFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("authentication required: %w", err)
-	}
+	// These checks make code less readable and more cumbersome
+	// Figure out a better way to do this
+	// TODO: This is not secure, config file can get tampered with.
+	// Get this value from env variable or vault
+	if !r.Config.Debug {
+		// Require admin role for viewing all users
+		claims, err := auth.GetClaimsFromContext(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("authentication required: %w", err)
+		}
 
-	userRole, err := auth.GetUserRoleFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("user role not found: %w", err)
-	}
+		userRole, err := auth.GetUserRoleFromContext(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("user role not found: %w", err)
+		}
 
-	if userRole != "admin" {
-		return nil, fmt.Errorf("admin access required")
+		if userRole != "admin" {
+			return nil, fmt.Errorf("admin access required")
+		}
+		return []*model.User{
+			{
+				ID:   claims.UserID,
+				Name: claims.Username,
+			},
+		}, nil
+	} else {
+		// Return list of users without check
+		return []*model.User{
+			{
+				ID:   "debug_id",
+				Name: "debug_name",
+			},
+		}, nil
 	}
 
 	// TODO: Implement actual user fetching logic
 	// For now, return a sample user list
-	return []*model.User{
-		{
-			ID:   claims.UserID,
-			Name: claims.Username,
-		},
-	}, nil
+
 }
 
 // Query returns QueryResolver implementation.

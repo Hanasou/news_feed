@@ -33,6 +33,7 @@ func createGrpcServer(config *config.UserServiceConfig, userService *core.UserSe
 	s := grpc.NewServer()
 	userpb.RegisterUserServiceServer(s, grpc_server.NewGrpcUserServer(userService))
 
+	log.Println("Now serving requests!")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalln("Failed to serve: ", err)
 	}

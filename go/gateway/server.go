@@ -107,6 +107,7 @@ func startGraphQlServer(jwtService *auth.JWTService) {
 	}
 
 	gqlResolver := createResolver(gatewayConfig)
+	log.Println("Created graphql resolver")
 	// TODO: Initialize clients here.
 	// Get client types from config file
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
@@ -129,6 +130,7 @@ func startGraphQlServer(jwtService *auth.JWTService) {
 	http.Handle("/query", jwtMiddleware(srv))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	log.Println("Now Serving Requests!")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
@@ -152,9 +154,10 @@ func createUserClient(clientType string, url string, port int, debug bool) clien
 			if err != nil {
 				log.Fatalf("Failed to connect to User service: %v", err)
 			}
+			log.Println("Established connection to grpc server: ", grpcServiceUrl)
 			defer conn.Close()
 		} else {
-			// TODO: Set up a connection to the gRPC server.
+			// TODO: Set up a safe connection to the gRPC server.
 			log.Fatalf("Implement connection with real credentials")
 		}
 		return grpc_clients.NewUserClient(userpb.NewUserServiceClient(conn))
