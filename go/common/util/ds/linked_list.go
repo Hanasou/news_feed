@@ -2,19 +2,19 @@ package ds
 
 import "fmt"
 
-type Node[T fmt.Stringer] struct {
+type ListNode[T fmt.Stringer] struct {
 	Value T
-	Next  *Node[T]
-	Prev  *Node[T]
+	Next  *ListNode[T]
+	Prev  *ListNode[T]
 }
 
 type LinkedList[T fmt.Stringer] struct {
-	Head *Node[T]
-	Tail *Node[T]
+	Head *ListNode[T]
+	Tail *ListNode[T]
 }
 
 func (list *LinkedList[T]) InsertFirst(value T) *LinkedList[T] {
-	node := &Node[T]{Value: value}
+	node := &ListNode[T]{Value: value}
 	if list.Head == nil {
 		list.Head = node
 	}
@@ -30,7 +30,7 @@ func (list *LinkedList[T]) InsertFirst(value T) *LinkedList[T] {
 }
 
 func (list *LinkedList[T]) InsertLast(value T) *LinkedList[T] {
-	node := &Node[T]{Value: value}
+	node := &ListNode[T]{Value: value}
 	if list.Head == nil {
 		list.Head = node
 	}
