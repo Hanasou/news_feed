@@ -106,3 +106,30 @@ func (service *UserService) AuthenticateUser(userIdentifier, password string) (*
 	log.Printf("User authenticated successfully: %v", user)
 	return tokenPair, user, nil
 }
+
+func (service *UserService) GetUsers(idFilter, nameFilter, emailFilter, roleFilter string) ([]*models.User, error) {
+	users, err := service.userTable.GetAll()
+	if err != nil {
+		log.Printf("GetUsers failed: %v", err)
+		return nil, err
+	}
+
+	filteredUsers := make([]*models.User, 0)
+	for _, user := range users {
+		if idFilter != "" && user.ID != idFilter {
+			continue
+		}
+		if nameFilter != "" && user.Username != nameFilter {
+			continue
+		}
+		if emailFilter != "" && user.Email != emailFilter {
+			continue
+		}
+		if roleFilter != "" && user.Role.String() != roleFilter {
+			continue
+		}
+		filteredUsers = append(filteredUsers, user)
+	}
+
+	return filteredUsers, nil
+}

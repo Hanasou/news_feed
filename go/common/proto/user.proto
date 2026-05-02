@@ -9,7 +9,7 @@ message User {
   string email    = 3;
   string password = 4;
   // User role (e.g., "admin", "user")
-  string role     = 5;
+  string role = 5;
 }
 
 message CreateUserRequest {
@@ -34,10 +34,24 @@ message AuthenticateUserResponse {
   User   user              = 5;
 }
 
+message GetUsersRequest {
+  string id_filter    = 1;
+  string name_filter  = 2;
+  string email_filter = 3;
+  string role_filter  = 4;
+}
+
+message GetUsersResponse {
+  string        response = 1;
+  repeated User users    = 2;
+}
+
 // UserService defines the user management operations.
 service UserService {
   // Creates a new user with the provided information.
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   // Authenticates a user and returns tokens upon successful authentication.
   rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
+  // Gets a list of users by provided filters
+  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }

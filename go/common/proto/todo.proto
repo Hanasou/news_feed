@@ -4,9 +4,9 @@ package todopb;
 option go_package = "/todopb";
 
 message Todo {
-  string id      = 1;
-  string text    = 2;
-  bool   done    = 3;
+  string id   = 1;
+  string text = 2;
+  bool   done = 3;
   // ID of the user who owns this todo
   string user_id = 4;
 }

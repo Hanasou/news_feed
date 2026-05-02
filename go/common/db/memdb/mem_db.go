@@ -106,7 +106,7 @@ func (db *MemDb[T]) UpsertAndSave(item T) error {
 	return nil
 }
 
-func (db *MemDb[T]) GetData() ([]T, error) {
+func (db *MemDb[T]) GetAll() ([]T, error) {
 	data := []T{}
 	for _, value := range db.Data {
 		data = append(data, value)
@@ -185,4 +185,25 @@ func (db *MemDb[T]) Delete(id string) error {
 		return db.SaveAllDataToFile(db.FilePath)
 	}
 	return nil
+}
+
+func (db *MemDb[T]) GetByFilter(filters map[string]any) ([]T, error) {
+	result := make([]T, 0)
+	for _, item := range db.Data {
+		matches := true
+		for field, value := range filters {
+			itemField, err := item.GetField(field)
+			if err != nil {
+				return nil, err
+			}
+			if itemField != value {
+				matches = false
+				break
+			}
+		}
+		if matches {
+			result = append(result, item)
+		}
+	}
+	return result, nil
 }

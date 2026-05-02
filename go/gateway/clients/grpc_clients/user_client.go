@@ -52,7 +52,7 @@ func (c *GrpcUserClient) AuthenticateUser(ctx context.Context, identifier, passw
 		return nil, err
 	}
 	user := &models.User{
-		ID:       grpcAuthResponse.User.ID,
+		ID:       grpcAuthResponse.User.Id,
 		Username: grpcAuthResponse.User.Username,
 		Email:    grpcAuthResponse.User.Email,
 		Password: grpcAuthResponse.User.Password,

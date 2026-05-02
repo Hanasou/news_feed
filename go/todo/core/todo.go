@@ -50,7 +50,11 @@ func (service *TodoService) CreateTodo(todo *models.Todo) error {
 }
 
 func (service *TodoService) GetTodos(userId string) ([]*models.Todo, error) {
-	todos, err := service.todoTable.GetData()
+	filters := map[string]any{}
+	if userId != "" {
+		filters["UserId"] = userId
+	}
+	todos, err := service.todoTable.GetByFilter(filters)
 	if err != nil {
 		log.Printf("Failed to get todos: %v", err)
 		return nil, err

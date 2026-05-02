@@ -26,8 +26,12 @@ const (
 // TodoServiceClient is the client API for TodoService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// TodoService defines the todo management operations.
 type TodoServiceClient interface {
+	// Creates a new todo item.
 	CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*CreateTodoResponse, error)
+	// Retrieves todo items, optionally filtered by user ID.
 	GetTodos(ctx context.Context, in *GetTodosRequest, opts ...grpc.CallOption) (*GetTodosResponse, error)
 }
 
@@ -62,8 +66,12 @@ func (c *todoServiceClient) GetTodos(ctx context.Context, in *GetTodosRequest, o
 // TodoServiceServer is the server API for TodoService service.
 // All implementations must embed UnimplementedTodoServiceServer
 // for forward compatibility.
+//
+// TodoService defines the todo management operations.
 type TodoServiceServer interface {
+	// Creates a new todo item.
 	CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error)
+	// Retrieves todo items, optionally filtered by user ID.
 	GetTodos(context.Context, *GetTodosRequest) (*GetTodosResponse, error)
 	mustEmbedUnimplementedTodoServiceServer()
 }
